@@ -1,10 +1,6 @@
 {
   "Files": [
     {
-      "Id": "/Users/aashishkumar/Documents/GitHub/DotNetCore/FullStackCoreProject/FullstackDotNetCore/obj/Debug/net7.0/scopedcss/projectbundle/FullstackDotNetCore.bundle.scp.css",
-      "PackagePath": "staticwebassets/FullstackDotNetCore.bundle.scp.css"
-    },
-    {
       "Id": "/Users/aashishkumar/Documents/GitHub/DotNetCore/FullStackCoreProject/FullstackDotNetCore/wwwroot/css/site.css",
       "PackagePath": "staticwebassets/css/site.css"
     },

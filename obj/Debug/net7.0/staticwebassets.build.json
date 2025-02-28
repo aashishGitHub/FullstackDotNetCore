@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "p3YPcWgRp69aOvA+czh9IzUuJboyRKdXz9QPRvVa6Gg=",
+  "Hash": "Nn1ZnSHim1SkpyvxfMbvTTaMwDSSGFFbig+giO7dLzo=",
   "Source": "FullstackDotNetCore",
   "BasePath": "_content/FullstackDotNetCore",
   "Mode": "Default",
@@ -16,40 +16,6 @@
     }
   ],
   "Assets": [
-    {
-      "Identity": "/Users/aashishkumar/Documents/GitHub/DotNetCore/FullStackCoreProject/FullstackDotNetCore/obj/Debug/net7.0/scopedcss/bundle/FullstackDotNetCore.styles.css",
-      "SourceId": "FullstackDotNetCore",
-      "SourceType": "Computed",
-      "ContentRoot": "/Users/aashishkumar/Documents/GitHub/DotNetCore/FullStackCoreProject/FullstackDotNetCore/obj/Debug/net7.0/scopedcss/bundle/",
-      "BasePath": "_content/FullstackDotNetCore",
-      "RelativePath": "FullstackDotNetCore.styles.css",
-      "AssetKind": "All",
-      "AssetMode": "CurrentProject",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "ScopedCss",
-      "AssetTraitValue": "ApplicationBundle",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "/Users/aashishkumar/Documents/GitHub/DotNetCore/FullStackCoreProject/FullstackDotNetCore/obj/Debug/net7.0/scopedcss/bundle/FullstackDotNetCore.styles.css"
-    },
-    {
-      "Identity": "/Users/aashishkumar/Documents/GitHub/DotNetCore/FullStackCoreProject/FullstackDotNetCore/obj/Debug/net7.0/scopedcss/projectbundle/FullstackDotNetCore.bundle.scp.css",
-      "SourceId": "FullstackDotNetCore",
-      "SourceType": "Computed",
-      "ContentRoot": "/Users/aashishkumar/Documents/GitHub/DotNetCore/FullStackCoreProject/FullstackDotNetCore/obj/Debug/net7.0/scopedcss/projectbundle/",
-      "BasePath": "_content/FullstackDotNetCore",
-      "RelativePath": "FullstackDotNetCore.bundle.scp.css",
-      "AssetKind": "All",
-      "AssetMode": "Reference",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "ScopedCss",
-      "AssetTraitValue": "ProjectBundle",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "/Users/aashishkumar/Documents/GitHub/DotNetCore/FullStackCoreProject/FullstackDotNetCore/obj/Debug/net7.0/scopedcss/projectbundle/FullstackDotNetCore.bundle.scp.css"
-    },
     {
       "Identity": "/Users/aashishkumar/Documents/GitHub/DotNetCore/FullStackCoreProject/FullstackDotNetCore/wwwroot/css/site.css",
       "SourceId": "FullstackDotNetCore",
