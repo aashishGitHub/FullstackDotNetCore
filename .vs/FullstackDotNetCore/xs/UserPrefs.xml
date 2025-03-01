@@ -1,4 +1,44 @@
 ﻿<Properties StartupConfiguration="{D9CB5F95-9AC9-4089-B78F-3980100D382D}|http">
-  <MonoDevelop.Ide.ItemProperties.FullstackDotNetCore FirstBuild="True" />
   <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.FullstackDotNetCore PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Data/IDataRepository.cs">
+    <Files>
+      <File FileName="Program.cs" Line="4" Column="52" />
+      <File FileName="README.md" />
+      <File FileName="appsettings.Development.json" Line="10" Column="1" />
+      <File FileName="Data/DataRepository.cs" Line="25" Column="28" />
+      <File FileName="Data/Models/AnswerGetResponse.cs" Line="2" Column="30" />
+      <File FileName="Data/Models/QuestionGetManyResponse.cs" Line="2" Column="30" />
+      <File FileName="Data/Models/QuestionGetSingleResponse.cs" Line="6" Column="25" />
+      <File FileName="appsettings.json" Line="6" Column="18" />
+      <File FileName="Controllers/QuestionsController.cs" Line="12" Column="23" />
+      <File FileName="Properties/launchSettings.json" Line="2" Column="36" />
+      <File FileName="Data/IDataRepository.cs" Line="24" Column="2" />
+      <File FileName="Data/IQuestionCache.cs" Line="6" Column="30" />
+      <File FileName="Data/QuestionCache.cs" Line="14" Column="12" />
+      <File FileName="Data/Models/AnswerPostRequest.cs" Line="1" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="FullstackDotNetCore">
+            <Node name="FullstackDotNetCore">
+              <Node name="Controllers" expanded="True" />
+              <Node name="Data" expanded="True">
+                <Node name="Models" expanded="True" />
+                <Node name="IDataRepository.cs" selected="True" />
+              </Node>
+              <Node name="Properties" expanded="True" />
+              <Node name="appsettings.json" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
 </Properties>
