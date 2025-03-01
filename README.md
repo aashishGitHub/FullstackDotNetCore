@@ -185,3 +185,70 @@ This project follows a clean architecture pattern with separation of concerns:
 4. **Authorization** handles permissions and security
 
 DbUp handles database migrations automatically when the app starts, creating all necessary tables and stored procedures.
+
+## Authorization Implementation
+
+This application implements a robust authorization system using JWT tokens and Auth0:
+
+### Auth0 Integration
+- **JWT Bearer Authentication**: Uses Microsoft.AspNetCore.Authentication.JwtBearer to validate tokens issued by Auth0
+- **Token Validation**: Validates issuer, audience, and signature of incoming JWT tokens
+- **Claims-based Authorization**: Uses the claims in the JWT token to identify users and their permissions
+
+### Custom Authorization Policies
+- **Resource-based Authorization**: The application implements custom authorization handlers for resource-specific permissions
+- **MustBeQuestionAuthor Policy**: Ensures that only the original author of a question can edit or delete it
+- **Authorization Requirements**: Uses the IAuthorizationRequirement interface to define custom requirements
+- **Custom Handler Implementation**: The MustBeQuestionAuthorHandler checks if the current user matches the author of the question being modified
+
+Example policy registration in startup:
+```csharp
+services.AddAuthorization(options =>
+{
+    options.AddPolicy("MustBeQuestionAuthor", policy =>
+        policy.Requirements.Add(new MustBeQuestionAuthorRequirement()));
+});
+```
+
+### User Identity Flow
+1. User authenticates with Auth0 and receives a JWT token
+2. Token is included in API requests in the Authorization header
+3. API validates the token and extracts user identity
+4. For protected resources, additional policy checks are performed (e.g., MustBeQuestionAuthor)
+5. Access is granted or denied based on policy evaluation
+
+## Caching Implementation
+
+The application implements a caching strategy to improve performance for frequently accessed questions:
+
+### Question Cache Design
+- **In-memory Cache**: Uses IMemoryCache to store frequently accessed questions
+- **Cache Invalidation**: Automatically invalidates cache entries when questions are updated or deleted
+- **Cache Keys**: Uses question IDs as cache keys for direct lookups
+
+### Caching Strategy
+- **Read-Through Caching**: Attempts to read from cache first, falls back to database if cache miss
+- **Write-Through Cache**: Updates both the database and cache when a question is modified
+- **Cache Expiration**: Cache entries automatically expire after a configured time period
+
+### Technical Implementation
+- **Dependency Injection**: Cache service is injected into controllers and repositories
+- **Thread Safety**: Cache operations are thread-safe for concurrent access
+- **Performance Benefits**: Reduces database load for popular questions
+- **Monitoring**: Cache hits and misses can be monitored for performance tuning
+
+Example cache usage:
+```csharp
+// Try to get from cache first
+var question = _cache.Get<QuestionGetSingleResponse>(questionId);
+if (question == null)
+{
+    // Cache miss - get from database
+    question = _dataRepository.GetQuestion(questionId);
+    // Store in cache for future requests
+    _cache.Set(questionId, question, TimeSpan.FromMinutes(30));
+}
+return question;
+```
+
+This caching implementation significantly reduces database load and improves response times for frequently accessed questions.
