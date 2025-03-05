@@ -1,10 +1,9 @@
 ﻿using DbUp;
-using Microsoft.Extensions.Configuration;
 using FullstackDotNetCore.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using FullstackDotNetCore.Authorization;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -12,10 +11,6 @@ var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 // Add services to the container.
 var connString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// TEMPORARILY BYPASS DATABASE CONNECTION FOR TESTING
-Console.WriteLine("WARNING: Database connection is temporarily bypassed for testing purposes!");
-Console.WriteLine("The application will start but database features won't work.");
-/*
 EnsureDatabase.For.SqlDatabase(connString);
 
 var upgrader = DeployChanges.To
@@ -29,7 +24,6 @@ if (upgrader.IsUpgradeRequired())
 {
     upgrader.PerformUpgrade();
 }
-*/
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -38,44 +32,80 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IDataRepository, DataRepository>();
 builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<IQuestionCache, QuestionCache>();
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme =
-      JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme =
-      JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
-{
-    options.Authority = builder.Configuration["Auth0:Authority"];
-    options.Audience =
-      builder.Configuration["Auth0:Audience"];
-});
-builder.Services.AddHttpClient();
+
+// Configure authentication first
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        if (builder.Environment.IsDevelopment())
+        {
+            options.Events = new JwtBearerEvents
+            {
+                OnTokenValidated = context =>
+                {
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.NameIdentifier, "mock-user-id"),
+                        new Claim(ClaimTypes.Name, "mock@example.com"),
+                        new Claim(ClaimTypes.Role, "Admin")
+                    };
+                    var identity = new ClaimsIdentity(claims, "Mock");
+                    context.Principal = new ClaimsPrincipal(identity);
+                    return Task.CompletedTask;
+                },
+                OnAuthenticationFailed = context =>
+                {
+                    // In development, always succeed with mock identity
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.NameIdentifier, "mock-user-id"),
+                        new Claim(ClaimTypes.Name, "mock@example.com"),
+                        new Claim(ClaimTypes.Role, "Admin")
+                    };
+                    var identity = new ClaimsIdentity(claims, "Mock");
+                    context.Principal = new ClaimsPrincipal(identity);
+                    context.Success();
+                    return Task.CompletedTask;
+                }
+            };
+        }
+    });
+
+// Configure authorization
 builder.Services.AddAuthorization(options =>
-    options.AddPolicy("MustBeQuestionAuthor", policy
-     =>
-      policy.Requirements
-      .Add(new MustBeQuestionAuthorRequirement())));
-builder.Services.AddScoped<
-    IAuthorizationHandler,
-    MustBeQuestionAuthorHandler>();
+{
+    if (builder.Environment.IsDevelopment())
+    {
+        options.DefaultPolicy = new AuthorizationPolicyBuilder()
+            .RequireAssertion(_ => true)
+            .Build();
+        
+        options.AddPolicy("MustBeQuestionAuthor", policy => 
+            policy.RequireAssertion(_ => true));
+    }
+    else 
+    {
+        options.AddPolicy("MustBeQuestionAuthor", policy =>
+            policy.Requirements.Add(new MustBeQuestionAuthorRequirement()));
+    }
+});
+
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<IAuthorizationHandler, MustBeQuestionAuthorHandler>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(MyAllowSpecificOrigins,
-                          policy =>
-                          {
-                              policy.WithOrigins("*") // this should be specific to the domain we need to whitelist
-                                                  .AllowAnyHeader()
-                                                  .AllowAnyMethod();
-                          });
+        policy =>
+        {
+            policy.WithOrigins("*")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
 });
-
-
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -84,15 +114,18 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// Correct middleware order
 app.UseRouting();
-
 app.UseCors(MyAllowSpecificOrigins);
 
+// Authentication and Authorization must be after UseRouting but before UseEndpoints
 app.UseAuthentication();
-
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 app.Run();
 

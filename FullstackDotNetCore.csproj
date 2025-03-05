@@ -15,10 +15,16 @@
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.1" />
     <PackageReference Include="dbup" Version="5.0.41" />
   </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="SQLScripts\*.sql" />
+  </ItemGroup>
+
   <ItemGroup>
     <None Remove="Data\" />
     <None Remove="Data\Models\" />
     <None Remove="Controllers\" />
+    <None Remove="SQLScripts\*.sql" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />

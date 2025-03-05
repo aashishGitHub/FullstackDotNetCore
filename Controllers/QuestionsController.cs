@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using FullstackDotNetCore.Data;
 using FullstackDotNetCore.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
-using Microsoft.Extensions.Configuration;
-using System.Net.Http;
 using System.Text.Json;
 
 namespace FullstackDotNetCore.Controllers
@@ -73,7 +66,7 @@ namespace FullstackDotNetCore.Controllers
             return question;
         }
 
-        [Authorize]
+        // [Authorize]
         [HttpPost]
         public async Task<ActionResult<QuestionGetSingleResponse>> PostQuestion(QuestionPostRequest questionPostRequest)
         {
@@ -82,7 +75,7 @@ namespace FullstackDotNetCore.Controllers
                 Title = questionPostRequest.Title,
                 Content = questionPostRequest.Content,
                 UserName = await GetUserName(),
-                UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value,
+                UserId = "1",// User.FindFirst(ClaimTypes.NameIdentifier).Value,
                 Created = DateTime.UtcNow
             });
             return CreatedAtAction(nameof(GetQuestion), new
@@ -91,7 +84,7 @@ namespace FullstackDotNetCore.Controllers
             }, savedQuestion);
         }
 
-        [Authorize(Policy = "MustBeQuestionAuthor")]
+        // [Authorize(Policy = "MustBeQuestionAuthor")]
         [HttpPut("{questionId}")]
         public async Task<ActionResult<QuestionGetSingleResponse>> PutQuestion(int questionId, QuestionPutRequest questionPutRequest)
         {
@@ -107,7 +100,7 @@ namespace FullstackDotNetCore.Controllers
             return savedQuestion;
         }
 
-        [Authorize(Policy = "MustBeQuestionAuthor")]
+        // [Authorize(Policy = "MustBeQuestionAuthor")]
         [HttpDelete("{questionId}")]
         public async Task<ActionResult> DeleteQuestion(int questionId)
         {
@@ -121,7 +114,7 @@ namespace FullstackDotNetCore.Controllers
             return NoContent();
         }
 
-        [Authorize(Policy = "MustBeQuestionAuthor")]
+        // [Authorize(Policy = "MustBeQuestionAuthor")]
         [HttpPost("answer")]
         public async Task<ActionResult<AnswerGetResponse>> PostAnswer(AnswerPostRequest answerPostRequest)
         {
@@ -134,8 +127,8 @@ namespace FullstackDotNetCore.Controllers
             {
                 QuestionId = answerPostRequest.QuestionId.Value,
                 Content = answerPostRequest.Content,
-                UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value,
-                UserName = await GetUserName(),
+                // UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value,
+                // UserName = await GetUserName(),
                 Created = DateTime.UtcNow
             });
 
@@ -145,23 +138,26 @@ namespace FullstackDotNetCore.Controllers
         }
         private async Task<string> GetUserName()
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, _auth0UserInfo);
-            request.Headers.Add("Authorization", Request.Headers["Authorization"].First());
+            // var request = new HttpRequestMessage(HttpMethod.Get, _auth0UserInfo);
+            // request.Headers.Add("Authorization", Request.Headers["Authorization"].First());
 
-            var client = _clientFactory.CreateClient();
+            // var client = _clientFactory.CreateClient();
 
-            var response = await client.SendAsync(request);
+            // var response = await client.SendAsync(request);
 
-            if (response.IsSuccessStatusCode)
-            {
-                var jsonContent = await response.Content.ReadAsStringAsync();
-                var user = JsonSerializer.Deserialize<User>(jsonContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                return user.Name;
-            }
-            else
-            {
-                return "";
-            }
+            // if (response.IsSuccessStatusCode)
+            // {
+            //     var jsonContent = await response.Content.ReadAsStringAsync();
+            //     var user = JsonSerializer.Deserialize<User>(jsonContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            //     return user.Name;
+            // }
+            // else
+            // {
+            //     return "";
+            // }
+            
+            
+             return await Task.FromResult("mock@example.com");
         }
     }
 }

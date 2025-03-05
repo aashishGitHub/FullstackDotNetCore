@@ -1,4 +1,3 @@
-using System;
 namespace FullstackDotNetCore.Data.Models
 {
 	public class QuestionGetManyResponse

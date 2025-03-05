@@ -1,8 +1,5 @@
-using System;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using FullstackDotNetCore.Data;
 
 namespace FullstackDotNetCore.Authorization
